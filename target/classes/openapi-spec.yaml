@@ -1,0 +1,186 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8888/api/v1
+  description: Generated server url
+tags:
+- name: Customers
+  description: Customer management APIs
+- name: Accounts
+  description: Account management APIs
+paths:
+  /customers/{customerId}/accounts:
+    get:
+      tags:
+      - Customers
+      summary: List of Accounts Based on Customer ID
+      description: Retrieves a list of accounts associated with a particular customer
+        ID.
+      operationId: getAccounts
+      parameters:
+      - name: customerId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+  /customers/{customerId}/accounts/summary:
+    get:
+      tags:
+      - Customers
+      summary: Summary of All Accounts
+      description: Retrieves a summary of all accounts associated with a particular
+        customer ID.
+      operationId: getAccountSummary
+      parameters:
+      - name: customerId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountSummary'
+  /accounts/{accountId}:
+    get:
+      tags:
+      - Accounts
+      summary: Details of a Particular Account (Account Profile)
+      description: Retrieves detailed information about a specific account by its
+        ID.
+      operationId: getAccount
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+  /accounts/{accountId}/transactions:
+    get:
+      tags:
+      - Accounts
+      summary: Last 5 Transactions for a Particular Account
+      description: Retrieves the last 5 transactions for a specific account.
+      operationId: getAccounts_1
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+  /accounts/{accountId}/balance:
+    get:
+      tags:
+      - Accounts
+      summary: Balance of Each Account
+      description: Retrieves the current balance of a specific account.
+      operationId: getBalance
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: number
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        accountId:
+          type: string
+        accountName:
+          type: string
+        accountType:
+          type: string
+          enum:
+          - SAVING
+          - CURRENT
+          - WALLET
+          - TRADING
+        balance:
+          type: number
+        currencyCode:
+          type: string
+          enum:
+          - GBP
+          - USD
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        transactionType:
+          type: string
+          enum:
+          - DEBIT
+          - CREDIT
+        transactionAmount:
+          type: number
+        transactionTime:
+          type: string
+          format: date-time
+    AccountSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        customer:
+          $ref: '#/components/schemas/Customer'
+        totalBalance:
+          type: number
+        currencyCode:
+          type: string
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+    Customer:
+      type: object
+      properties:
+        customerId:
+          type: string
+        customerName:
+          type: string

@@ -1,0 +1,24 @@
+logging:
+    config: classpath:log4j2-local.xml
+
+spring:
+    datasource:
+        url: jdbc:h2:mem:hsbc_db
+        username: sa
+        password: password
+        driverClassName: org.h2.Driver
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+        defer-datasource-initialization: true
+        hibernate:
+            ddl-auto: create-drop
+    h2:
+        console.enabled: true
+        console.path: /h2-console
+
+account-url: http://localhost:8080/api/v1/accounts/{account-id}
+
+
+
+
+
